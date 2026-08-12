@@ -1,191 +1,221 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { createRoot } from 'react-dom/client'
-import { ArrowDown, ArrowUpRight, Clock3, MapPin, Menu, ShieldCheck, Sparkles, X } from 'lucide-react'
+import { ArrowDownRight, ArrowRight, Menu, Minus, Plus, X } from 'lucide-react'
 import './styles.css'
 
-const services = [
-  {
-    eyebrow: 'Hosted service',
-    title: 'Full-service catering',
-    copy: 'A dedicated attendant handles setup, coals, bowl changes, and breakdown throughout the event so the host can stay present with guests.',
-    meta: ['4-hour standard service', 'On-site attendant', 'Setup and breakdown'],
-  },
-  {
-    eyebrow: 'Prepared service',
-    title: 'Event delivery',
-    copy: 'Prepared setups arrive ready for your event, with pickup coordinated afterward. Availability and service area are confirmed directly.',
-    meta: ['Los Angeles & Valley', 'Prepared before arrival', 'Pickup coordinated'],
-  },
+const faq = [
+  ['How long does catering last?', 'Standard catering service is four hours from the listed start time. An attendant stays on site throughout the session managing coals, bowls, setup, and breakdown.'],
+  ['How is catering pricing structured?', 'Catering uses tiered per-hookah pricing. The first 10 are $100 each, 11–20 are $80 each, and quantities above 20 are $70 each.'],
+  ['How far do you deliver?', 'Delivery is free within 25 miles. Travel fees apply outside the local service area: $50 for 25–50 miles and $100 for 50–100 miles.'],
+  ['Can I request a specific brand or flavor?', 'Yes. Brand, flavor, and mix preferences can be discussed directly. Specialty requests depend on availability and are confirmed before the event.'],
+  ['Is there an age requirement?', 'Yes. Service is for adults 21 and older. Hookah smoking involves tobacco and carries health risks, including exposure to carbon monoxide.'],
 ]
 
 const steps = [
-  ['01', 'Tell us about the event', 'Share the date, location, guest count, and the kind of atmosphere you want.'],
-  ['02', 'We shape the setup', 'We confirm service availability and recommend the right event format for your space.'],
-  ['03', 'Details get locked in', 'Timing, access, setup requirements, and event notes are confirmed directly.'],
-  ['04', 'We handle the night', 'Our team arrives, sets up, stays focused on service, and leaves the space clean.'],
-]
-
-const faqs = [
-  ['How long does catering last?', 'Standard hosted service is four hours from the agreed start time. Longer events can be discussed when the event details are confirmed.'],
-  ['Where do you serve?', 'Hookah By Hov serves Los Angeles, the San Fernando Valley, and surrounding areas. Exact availability depends on the event location.'],
-  ['Can I request a specific brand or flavor?', 'Preferences can be discussed when you contact the team. Availability varies, so special requests are confirmed directly.'],
-  ['Is this website for online purchases?', 'No. This site is for service information and event inquiries only. Payments and event details are handled directly with the team.'],
-  ['Is there an age requirement?', 'Yes. Service is intended for adults 21 and older. Tobacco use carries health risks, including exposure to carbon monoxide.'],
+  ['01', 'Choose the service', 'Decide whether you want full-service catering or prepared delivery.'],
+  ['02', 'Share the night', 'Send the date, location, guest count, and any flavor or setup preferences.'],
+  ['03', 'Confirm the details', 'Hov confirms availability, timing, travel, and any specialty requests directly.'],
+  ['04', 'Enjoy the event', 'The setup arrives ready, and hosted events are managed from setup through breakdown.'],
 ]
 
 function App() {
-  const [menuOpen, setMenuOpen] = useState(false)
+  const [menu, setMenu] = useState(false)
   const [openFaq, setOpenFaq] = useState(0)
 
-  useEffect(() => {
-    const onKey = (event) => event.key === 'Escape' && setMenuOpen(false)
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [])
-
   return (
-    <div className="site-shell">
-      <header className="nav-wrap">
-        <a className="brand" href="#top" aria-label="Hookah By Hov home">
-          <span className="brand-mark">H</span>
-          <span className="brand-copy"><strong>Hookah By Hov</strong><small>Los Angeles · Est. 2020</small></span>
+    <div className="page" id="top">
+      <div className="ambient ambient-a" />
+      <div className="ambient ambient-b" />
+
+      <header className="site-header">
+        <a className="wordmark" href="#top" aria-label="Hookah By Hov home">
+          <span className="wordmark-main">HookahByHov</span>
+          <span className="wordmark-sub">EST. 2020 · LOS ANGELES</span>
         </a>
-        <nav className="desktop-nav" aria-label="Primary navigation">
+        <nav className="nav-desktop" aria-label="Primary navigation">
           <a href="#services">Services</a>
-          <a href="#process">Process</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#process">How it works</a>
           <a href="#faq">FAQ</a>
-          <a className="nav-cta" href="#contact">Contact</a>
+          <a className="nav-contact" href="#contact">Contact</a>
         </nav>
-        <button className="menu-button" onClick={() => setMenuOpen(true)} aria-label="Open menu"><Menu size={20} /></button>
+        <button className="menu-toggle" aria-label="Open navigation" onClick={() => setMenu(true)}><Menu size={20} /></button>
       </header>
 
-      {menuOpen && (
-        <div className="mobile-panel" role="dialog" aria-modal="true" aria-label="Navigation menu">
-          <button className="close-button" onClick={() => setMenuOpen(false)} aria-label="Close menu"><X size={20} /></button>
-          <div className="mobile-links">
-            {['services', 'process', 'faq', 'contact'].map((item) => (
-              <a key={item} href={`#${item}`} onClick={() => setMenuOpen(false)}>{item}</a>
+      {menu && (
+        <div className="mobile-nav">
+          <button onClick={() => setMenu(false)} aria-label="Close navigation"><X size={22} /></button>
+          <div className="mobile-nav-links">
+            {['services','pricing','process','faq','contact'].map((item) => (
+              <a key={item} href={`#${item}`} onClick={() => setMenu(false)}>{item}</a>
             ))}
           </div>
+          <span>21+ · Los Angeles & The Valley</span>
         </div>
       )}
 
-      <main id="top">
-        <section className="hero section-pad">
-          <div className="hero-grid">
-            <div className="hero-copy">
-              <p className="kicker"><Sparkles size={14} /> Private events · Los Angeles</p>
-              <h1>The lounge<br /><em>comes to you.</em></h1>
-              <p className="lede">A polished hookah service built around the event, not around a template. Hosted catering and prepared delivery for private gatherings, celebrations, and nightlife.</p>
-              <div className="hero-actions">
-                <a className="button button-primary" href="#services">Explore services <ArrowDown size={16} /></a>
-                <a className="text-link" href="#contact">Contact the team <ArrowUpRight size={16} /></a>
-              </div>
-            </div>
-            <div className="hero-art" aria-hidden="true">
-              <div className="orb orb-one" />
-              <div className="orb orb-two" />
-              <div className="monogram-card">
-                <span className="micro">HOOKAH BY HOV</span>
-                <div className="monogram">H</div>
-                <span className="micro">EST. 2020 · LOS ANGELES</span>
-              </div>
-              <div className="floating-note note-one"><Clock3 size={15} /> 4-hour hosted service</div>
-              <div className="floating-note note-two"><MapPin size={15} /> LA + The Valley</div>
+      <main>
+        <section className="hero">
+          <div className="hero-rail hero-rail-left">PRIVATE EVENTS · WEDDINGS · HOUSE PARTIES</div>
+          <div className="hero-inner">
+            <p className="eyebrow">Full-service hookah catering & delivery</p>
+            <h1>The hookah shows up.<br /><span>The night takes care of itself.</span></h1>
+            <p className="hero-copy">For parties, weddings, lounges, and everything in between. Choose the level of service you want, tell us the night, and we’ll handle the setup from there.</p>
+            <div className="hero-ctas">
+              <a className="primary-cta" href="#services">See the services <ArrowDownRight size={17} /></a>
+              <a className="secondary-cta" href="#pricing">View pricing</a>
             </div>
           </div>
-          <div className="hero-footer">
-            <span>21+ only</span><span>Private events</span><span>Hosted or prepared service</span>
+          <div className="hero-rail hero-rail-right">LOS ANGELES · THE VALLEY · EST. 2020</div>
+          <div className="hero-stats">
+            <div><strong>4 hrs</strong><span>standard catering service</span></div>
+            <div><strong>$60</strong><span>per hookah, delivered</span></div>
+            <div><strong>25 mi</strong><span>free delivery radius</span></div>
           </div>
         </section>
 
-        <section id="services" className="section-pad services-section">
-          <div className="section-heading split-heading">
-            <div><p className="eyebrow">Two ways to host</p><h2>Choose the level<br />of service.</h2></div>
-            <p>Both options are designed around one thing: making the event feel effortless. The difference is whether the team stays on site or prepares the setup for you.</p>
+        <section className="ticker" aria-label="Event types">
+          <div>BACHELOR & BACHELORETTE <i>◆</i> HOUSE PARTIES <i>◆</i> WEDDINGS <i>◆</i> PRIVATE EVENTS <i>◆</i> LOUNGES <i>◆</i></div>
+        </section>
+
+        <section id="services" className="section services">
+          <div className="section-intro">
+            <p className="eyebrow">Two ways to book</p>
+            <h2>Catering or delivery.<br />Your call.</h2>
+            <p>Want someone there running the session all night? That’s catering. Just want the hookahs dropped off ready to smoke? That’s delivery.</p>
           </div>
-          <div className="service-grid">
-            {services.map((service, index) => (
-              <article className="service-card" key={service.title}>
-                <div className="service-index">0{index + 1}</div>
-                <p className="eyebrow">{service.eyebrow}</p>
-                <h3>{service.title}</h3>
-                <p>{service.copy}</p>
-                <ul>{service.meta.map((item) => <li key={item}><span>◆</span>{item}</li>)}</ul>
-              </article>
-            ))}
+
+          <div className="service-layout">
+            <article className="service-panel service-panel-featured">
+              <div className="panel-topline"><span>01</span><span>FULL-SERVICE</span></div>
+              <div className="panel-copy">
+                <p className="service-kicker">Catering</p>
+                <h3>We run the setup.<br />You run the night.</h3>
+                <p>Our team arrives, sets up, and stays for the entire event, managing coals, changing bowls, and keeping every hookah running.</p>
+              </div>
+              <div className="panel-list">
+                <span>4 hours on site</span><span>Dedicated attendant</span><span>Setup + breakdown</span><span>Volume pricing</span>
+              </div>
+            </article>
+
+            <article className="service-panel service-panel-dark">
+              <div className="panel-topline"><span>02</span><span>PREPARED DELIVERY</span></div>
+              <div className="panel-copy">
+                <p className="service-kicker">Delivery</p>
+                <h3>Lit, ready,<br />and at your door.</h3>
+                <p>Prepared hookahs are delivered ready for the event, with coals, foil, and an extra bowl packed in. Pickup is coordinated afterward.</p>
+              </div>
+              <div className="panel-list">
+                <span>$60 flat rate</span><span>Any quantity</span><span>Free within 25 miles</span><span>Pickup arranged</span>
+              </div>
+            </article>
           </div>
         </section>
 
-        <section className="statement-band">
-          <div className="marquee" aria-hidden="true">PRIVATE EVENTS · HOUSE PARTIES · WEDDINGS · CELEBRATIONS · LOS ANGELES · THE VALLEY ·</div>
+        <section id="pricing" className="section pricing">
+          <div className="pricing-head">
+            <div>
+              <p className="eyebrow">Straight numbers</p>
+              <h2>Transparent pricing.<br />No mystery math.</h2>
+            </div>
+            <p>Clear service rates, clear travel fees, and no online payment required. Final event details are confirmed directly.</p>
+          </div>
+
+          <div className="pricing-grid">
+            <div className="pricing-card">
+              <div className="pricing-card-head"><span>Catering rates</span><small>4-hour standard service</small></div>
+              <div className="rate-row rate-header"><span>Hookahs</span><span>Rate each</span><span>Example</span></div>
+              <div className="rate-row"><span>1–10</span><strong>$100</strong><span>10 = $1,000</span></div>
+              <div className="rate-row"><span>11–20</span><strong>$80</strong><span>20 = $1,800</span></div>
+              <div className="rate-row"><span>21+</span><strong>$70</strong><span>25 = $2,150</span></div>
+              <p className="pricing-note">Tiered pricing applies progressively. The first 10 are billed at $100 each, the next 10 at $80 each, and quantities above 20 at $70 each.</p>
+            </div>
+
+            <div className="pricing-side">
+              <div className="delivery-price">
+                <span>Delivery</span>
+                <strong>$60</strong>
+                <small>per hookah · any quantity</small>
+              </div>
+              <div className="travel-table">
+                <div><span>Within 25 miles</span><strong>Free</strong></div>
+                <div><span>25–50 miles</span><strong>+$50</strong></div>
+                <div><span>50–100 miles</span><strong>+$100</strong></div>
+                <div><span>Over 100 miles</span><strong>Call us</strong></div>
+              </div>
+              <div className="fee-note"><span>Holiday catering surcharge</span><strong>+$200</strong></div>
+              <div className="fee-note"><span>Same-day catering fee</span><strong>+$200</strong></div>
+            </div>
+          </div>
         </section>
 
-        <section id="process" className="section-pad process-section">
-          <div className="process-intro">
-            <p className="eyebrow">Simple by design</p>
-            <h2>Good service should feel almost invisible.</h2>
-            <p>The logistics happen in the background so guests only notice the atmosphere.</p>
+        <section className="flavors">
+          <div className="flavors-heading">
+            <p className="eyebrow">Tobacco requests</p>
+            <h2>Ask for what you actually want.</h2>
+            <p>We stock crowd-pleasers and can discuss specialty brands, flavors, or mixes directly before the event.</p>
           </div>
-          <div className="process-list">
-            {steps.map(([number, title, copy]) => (
-              <div className="process-row" key={number}>
-                <span className="step-number">{number}</span>
+          <div className="flavor-field" aria-hidden="true">
+            <span>Double Apple</span><span>Love 66</span><span>Blueberry Mint</span><span>White Peach</span><span>Watermelon</span><span>Lemon Mint</span><span>Grape</span><span>Ambrosia</span><span>Al Fakher</span><span>Fumari</span><span>Adalya</span><span>Tangiers</span><span>Starbuzz</span><span>Trifecta</span><span>Mighty Freeze</span><span>Cane Mint</span>
+          </div>
+        </section>
+
+        <section id="process" className="section process">
+          <div className="process-title">
+            <p className="eyebrow">Simple as it gets</p>
+            <h2>Four steps.<br />One less thing to worry about.</h2>
+          </div>
+          <div className="steps">
+            {steps.map(([n, title, copy]) => (
+              <div className="step" key={n}>
+                <span>{n}</span>
                 <h3>{title}</h3>
                 <p>{copy}</p>
+                <ArrowRight size={17} />
               </div>
             ))}
           </div>
         </section>
 
-        <section className="section-pad detail-section">
-          <div className="detail-card">
-            <div>
-              <p className="eyebrow">A better event experience</p>
-              <h2>Designed for hosts who don't want to babysit the setup.</h2>
-            </div>
-            <div className="detail-points">
-              <div><ShieldCheck size={20} /><strong>Attentive service</strong><span>Setup, maintenance, and breakdown are handled with care.</span></div>
-              <div><Sparkles size={20} /><strong>Clean presentation</strong><span>The setup is treated like part of the event, not an afterthought.</span></div>
-              <div><Clock3 size={20} /><strong>Clear timing</strong><span>Arrival and service details are agreed on before the event.</span></div>
-            </div>
-          </div>
-        </section>
-
-        <section id="faq" className="section-pad faq-section">
-          <div className="section-heading split-heading">
-            <div><p className="eyebrow">Good to know</p><h2>Frequently asked.</h2></div>
-            <p>Short answers to the practical questions that usually come up before an event.</p>
+        <section id="faq" className="section faq">
+          <div className="faq-title">
+            <p className="eyebrow">Good to know</p>
+            <h2>Before the night.</h2>
           </div>
           <div className="faq-list">
-            {faqs.map(([question, answer], index) => {
-              const isOpen = openFaq === index
+            {faq.map(([q,a], index) => {
+              const open = openFaq === index
               return (
-                <div className={`faq-item ${isOpen ? 'open' : ''}`} key={question}>
-                  <button onClick={() => setOpenFaq(isOpen ? -1 : index)} aria-expanded={isOpen}>
-                    <span>{question}</span><span className="faq-symbol">{isOpen ? '−' : '+'}</span>
+                <div className={`faq-item ${open ? 'open' : ''}`} key={q}>
+                  <button onClick={() => setOpenFaq(open ? -1 : index)} aria-expanded={open}>
+                    <span>{String(index + 1).padStart(2,'0')}</span>
+                    <strong>{q}</strong>
+                    {open ? <Minus size={19}/> : <Plus size={19}/>} 
                   </button>
-                  {isOpen && <p>{answer}</p>}
+                  {open && <p>{a}</p>}
                 </div>
               )
             })}
           </div>
         </section>
 
-        <section id="contact" className="contact-section">
-          <div className="contact-card">
-            <p className="eyebrow">Have a date in mind?</p>
-            <h2>Tell Hov about the event.</h2>
-            <p>For availability, service-area questions, and event details, contact the team directly.</p>
-            <a className="button button-primary" href="tel:+18188078008">818-807-8008 <ArrowUpRight size={16} /></a>
-          </div>
+        <section id="contact" className="contact">
+          <p className="eyebrow">Got a date in mind?</p>
+          <h2>Lock in the details<br />before the night fills up.</h2>
+          <p>Call or text Hov for availability, event details, service-area questions, and specialty requests.</p>
+          <a href="tel:+18188078008">818-807-8008 <ArrowRight size={18}/></a>
         </section>
       </main>
 
       <footer>
-        <div className="footer-brand"><span className="brand-mark">H</span><div><strong>Hookah By Hov</strong><small>Est. 2020 · Los Angeles, California</small></div></div>
-        <div className="footer-note">21+ only. Hookah smoking involves tobacco and carries health risks, including exposure to carbon monoxide. Please enjoy responsibly.</div>
-        <div className="footer-bottom"><span>© 2026 Hookah By Hov</span><a href="#top">Back to top ↑</a></div>
+        <div className="footer-top">
+          <div className="wordmark footer-wordmark"><span className="wordmark-main">HookahByHov</span><span className="wordmark-sub">EST. 2020 · LOS ANGELES</span></div>
+          <div className="footer-links"><a href="#services">Services</a><a href="#pricing">Pricing</a><a href="#process">How it works</a><a href="#faq">FAQ</a></div>
+        </div>
+        <div className="footer-bottom">
+          <span>© 2026 Hookah By Hov. All rights reserved.</span>
+          <span>21+ only. Hookah smoking involves tobacco and carries health risks, including exposure to carbon monoxide.</span>
+        </div>
       </footer>
     </div>
   )
