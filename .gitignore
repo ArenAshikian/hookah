@@ -1,0 +1,5 @@
+# Informational React website build artifacts
+node_modules/
+dist/
+.DS_Store
+*.local
